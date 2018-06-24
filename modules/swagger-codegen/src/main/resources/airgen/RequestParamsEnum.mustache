@@ -1,0 +1,10 @@
+{{#allParams}}
+{{#isEnum}}
+/**
+    * enum for parameter {{paramName}}
+    */
+public enum {{enumName}}: String, Codable { {{#allowableValues}}{{#enumVars}}
+    case {{name}} = {{#isContainer}}"{{/isContainer}}{{#isString}}"{{/isString}}{{{value}}}{{#isString}}"{{/isString}}{{#isContainer}}"{{/isContainer}}{{/enumVars}}{{/allowableValues}}
+}
+{{/isEnum}}
+{{/allParams}}

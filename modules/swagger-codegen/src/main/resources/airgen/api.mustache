@@ -20,16 +20,17 @@ import AirGap
 {{> RequestsBaseObjects}}
 
 {{#operation}}
+{{> RequestParamsEnum}}
 public class {{operationIdCamelCase}}Request: NSObject, Codable {
 
     {{> RequestURL}}
 
     public let url:  {{operationIdCamelCase}}Request.URL{{#hasHeaderParams}}
     public let headers: {{operationIdCamelCase}}Request.Headers{{/hasHeaderParams}}{{#hasBodyParam}}
-    public let body: {{#bodyParam}}{{dataType}}{{/bodyParam}}
-    {{/hasBodyParam}}{{#hasParams}}
+    public let body: {{#bodyParam}}{{dataType}}{{/bodyParam}}{{/hasBodyParam}}
+
     public init(
-        url: {{operationIdCamelCase}}Request.URL{{#hasHeaderParams}},
+        url: {{operationIdCamelCase}}Request.URL{{^hasParams}} = {{operationIdCamelCase}}Request.URL(){{/hasParams}}{{#hasHeaderParams}},
         headers: {{operationIdCamelCase}}Request.Headers{{/hasHeaderParams}}{{#hasBodyParam}},
         body: {{#bodyParam}}{{dataType}}{{/bodyParam}}{{/hasBodyParam}}) {
             self.url = url{{#hasHeaderParams}}
@@ -37,7 +38,6 @@ public class {{operationIdCamelCase}}Request: NSObject, Codable {
             self.body = body{{/hasBodyParam}}
         super.init()
     }
-    {{/hasParams}}
 }
 
 {{> RequestParamsPath}}
