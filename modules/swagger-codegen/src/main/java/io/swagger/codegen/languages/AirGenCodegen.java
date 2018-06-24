@@ -60,13 +60,13 @@ public class AirGenCodegen extends DefaultCodegen implements CodegenConfig {
     protected static final String LIBRARY_PROMISE_KIT = "PromiseKit";
     protected static final String LIBRARY_RX_SWIFT = "RxSwift";
     protected static final String[] RESPONSE_LIBRARIES = { LIBRARY_PROMISE_KIT, LIBRARY_RX_SWIFT };
-    protected String projectName = "SwaggerClient";
+    protected String projectName = "AirGen";
     protected boolean unwrapRequired;
     protected boolean objcCompatible = false;
     protected boolean lenientTypeCast = false;
     protected boolean swiftUseApiNamespace;
     protected String[] responseAs = new String[0];
-    protected String sourceFolder = "Classes" + File.separator + "Swaggers";
+    protected String sourceFolder = "";
 
     @Override
     public CodegenType getTag() {
@@ -80,7 +80,7 @@ public class AirGenCodegen extends DefaultCodegen implements CodegenConfig {
 
     @Override
     public String getHelp() {
-        return "Generates a swift client library.";
+        return "Generates AirGap interfaces based on Smart Contracts.";
     }
 
     @Override
@@ -272,22 +272,32 @@ public class AirGenCodegen extends DefaultCodegen implements CodegenConfig {
 
         setLenientTypeCast(convertPropertyToBooleanAndWriteBack(LENIENT_TYPE_CAST));
 
-        supportingFiles.add(new SupportingFile("Podspec.mustache", "", projectName + ".podspec"));
-        supportingFiles.add(new SupportingFile("Cartfile.mustache", "", "Cartfile"));
-        supportingFiles.add(new SupportingFile("APIHelper.mustache", sourceFolder, "APIHelper.swift"));
-        supportingFiles.add(new SupportingFile("AlamofireImplementations.mustache", sourceFolder,
-                "AlamofireImplementations.swift"));
-        supportingFiles.add(new SupportingFile("Configuration.mustache", sourceFolder, "Configuration.swift"));
-        supportingFiles.add(new SupportingFile("Extensions.mustache", sourceFolder, "Extensions.swift"));
+        // supportingFiles.add(new SupportingFile("Podspec.mustache", "", projectName +
+        // ".podspec"));
+        // supportingFiles.add(new SupportingFile("Cartfile.mustache", "", "Cartfile"));
+        // supportingFiles.add(new SupportingFile("APIHelper.mustache", sourceFolder,
+        // "APIHelper.swift"));
+        // supportingFiles.add(new SupportingFile("AlamofireImplementations.mustache",
+        // sourceFolder,
+        // "AlamofireImplementations.swift"));
+        // supportingFiles.add(new SupportingFile("Configuration.mustache",
+        // sourceFolder, "Configuration.swift"));
+        // supportingFiles.add(new SupportingFile("Extensions.mustache", sourceFolder,
+        // "Extensions.swift"));
         supportingFiles.add(new SupportingFile("Models.mustache", sourceFolder, "Models.swift"));
         supportingFiles.add(new SupportingFile("APIs.mustache", sourceFolder, "APIs.swift"));
-        supportingFiles.add(new SupportingFile("CodableHelper.mustache", sourceFolder, "CodableHelper.swift"));
-        supportingFiles
-                .add(new SupportingFile("JSONEncodableEncoding.mustache", sourceFolder, "JSONEncodableEncoding.swift"));
-        supportingFiles
-                .add(new SupportingFile("JSONEncodingHelper.mustache", sourceFolder, "JSONEncodingHelper.swift"));
-        supportingFiles.add(new SupportingFile("git_push.sh.mustache", "", "git_push.sh"));
-        supportingFiles.add(new SupportingFile("gitignore.mustache", "", ".gitignore"));
+        // supportingFiles.add(new SupportingFile("CodableHelper.mustache",
+        // sourceFolder, "CodableHelper.swift"));
+        // supportingFiles
+        // .add(new SupportingFile("JSONEncodableEncoding.mustache", sourceFolder,
+        // "JSONEncodableEncoding.swift"));
+        // supportingFiles
+        // .add(new SupportingFile("JSONEncodingHelper.mustache", sourceFolder,
+        // "JSONEncodingHelper.swift"));
+        // supportingFiles.add(new SupportingFile("git_push.sh.mustache", "",
+        // "git_push.sh"));
+        // supportingFiles.add(new SupportingFile("gitignore.mustache", "",
+        // ".gitignore"));
 
     }
 
