@@ -1,4 +1,4 @@
-package io.swagger.codegen.swift4;
+package io.swagger.codegen.airgen;
 
 import io.swagger.codegen.AbstractOptionsTest;
 import io.swagger.codegen.CodegenConfig;

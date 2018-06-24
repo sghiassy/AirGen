@@ -94,14 +94,14 @@ public class AirGenCodegen extends DefaultCodegen implements CodegenConfig {
     }
 
     /**
-     * Constructor for the swift4 language codegen module.
+     * Constructor for the airgen language codegen module.
      */
     public AirGenCodegen() {
         super();
         outputFolder = "generated-code" + File.separator + "swift";
         modelTemplateFiles.put("model.mustache", ".swift");
         apiTemplateFiles.put("api.mustache", ".swift");
-        embeddedTemplateDir = templateDir = "swift4";
+        embeddedTemplateDir = templateDir = "airgen";
         apiPackage = File.separator + "APIs";
         modelPackage = File.separator + "Models";
 

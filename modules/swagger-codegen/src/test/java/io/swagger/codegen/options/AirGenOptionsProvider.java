@@ -32,7 +32,7 @@ public class AirGenOptionsProvider implements OptionsProvider {
 
     @Override
     public String getLanguage() {
-        return "swift4";
+        return "airgen";
     }
 
     @Override

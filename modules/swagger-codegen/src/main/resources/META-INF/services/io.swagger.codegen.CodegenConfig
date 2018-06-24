@@ -1,5 +1,6 @@
 io.swagger.codegen.languages.AdaCodegen
 io.swagger.codegen.languages.AdaServerCodegen
+io.swagger.codegen.languages.AirGenCodegen
 io.swagger.codegen.languages.AkkaScalaClientCodegen
 io.swagger.codegen.languages.AndroidClientCodegen
 io.swagger.codegen.languages.Apache2ConfigCodegen

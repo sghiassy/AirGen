@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "codegen":"java -jar modules/swagger-codegen-cli/target/swagger-codegen-cli.jar generate -i ~/Dev/Groupon/d3c/feature/dealdetails.groupon.mobile/dealdetails.groupon.mobile/Assets/dealdetails-domain-config.yaml -l airgen -o ~/Dev/Groupon/d3c/feature/dealdetails.groupon.mobile/dealdetails.groupon.mobile/AirGen/",
-    "build:jar": "./run-in-docker.sh mvn package"
+    "build:jar": "./mvnw clean package"
   },
   "repository": {
     "type": "git",

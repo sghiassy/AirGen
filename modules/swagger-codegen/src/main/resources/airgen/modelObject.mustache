@@ -1,3 +1,5 @@
+// I am the Comment
+
 
 public struct {{classname}}: Codable {
 
@@ -9,12 +11,12 @@ public struct {{classname}}: Codable {
 {{#allVars}}
 {{#isEnum}}
     {{#description}}/** {{description}} */
-    {{/description}}public var {{name}}: {{{datatypeWithEnum}}}{{^required}}?{{/required}}{{#defaultValue}} = {{{defaultValue}}}{{/defaultValue}}
+    {{/description}}public let {{name}}: {{{datatypeWithEnum}}}{{^required}}?{{/required}}{{#defaultValue}} = {{{defaultValue}}}{{/defaultValue}}
 {{/isEnum}}
 {{^isEnum}}
     {{#description}}/** {{description}} */
-    {{/description}}public var {{name}}: {{{datatype}}}{{^required}}?{{/required}}{{#defaultValue}} = {{{defaultValue}}}{{/defaultValue}}{{#objcCompatible}}{{#vendorExtensions.x-swift-optional-scalar}}
-    public var {{name}}Num: NSNumber? {
+    {{/description}}public let {{name}}: {{{datatype}}}{{^required}}?{{/required}}{{#defaultValue}} = {{{defaultValue}}}{{/defaultValue}}{{#objcCompatible}}{{#vendorExtensions.x-swift-optional-scalar}}
+    public let {{name}}Num: NSNumber? {
         get {
             return {{name}}.map({ return NSNumber(value: $0) })
         }
@@ -30,7 +32,7 @@ public struct {{classname}}: Codable {
     }
 {{/hasVars}}
 {{#additionalPropertiesType}}
-    public var additionalProperties: [String:{{{additionalPropertiesType}}}] = [:]
+    public let additionalProperties: [String:{{{additionalPropertiesType}}}] = [:]
 
     public subscript(key: String) -> {{{additionalPropertiesType}}}? {
         get {
@@ -49,7 +51,7 @@ public struct {{classname}}: Codable {
 
     public func encode(to encoder: Encoder) throws {
 
-        var container = encoder.container(keyedBy: String.self)
+        let container = encoder.container(keyedBy: String.self)
 
         {{#allVars}}
         try container.encode{{^required}}IfPresent{{/required}}({{{name}}}, forKey: "{{{baseName}}}")
@@ -65,7 +67,7 @@ public struct {{classname}}: Codable {
         {{#allVars}}
         {{name}} = try container.decode{{^required}}IfPresent{{/required}}({{{datatypeWithEnum}}}.self, forKey: "{{{baseName}}}")
         {{/allVars}}
-        var nonAdditionalPropertyKeys = Set<String>()
+        let nonAdditionalPropertyKeys = Set<String>()
         {{#allVars}}
         nonAdditionalPropertyKeys.insert("{{{baseName}}}")
         {{/allVars}}

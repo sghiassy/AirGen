@@ -1,4 +1,4 @@
-package io.swagger.codegen.swift4;
+package io.swagger.codegen.airgen;
 
 import io.swagger.codegen.CodegenModel;
 import io.swagger.codegen.CodegenProperty;
