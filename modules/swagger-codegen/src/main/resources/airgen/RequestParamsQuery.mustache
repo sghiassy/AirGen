@@ -1,50 +1,15 @@
-
 {{#hasQueryParams}}
-@objc({{classname}}Query)
-public class Query: AirGenQuery, Codable {
+    public struct Query: Codable {
 
-{{#queryParams}}
-    public let {{paramName}}: {{{dataType}}}{{> AddOptionalMark.snippet}}
-{{/queryParams}}
+    {{#queryParams}}
+        {{#description}}/** {{description}} */
+        {{/description}}public let {{paramName}}: {{dataType}}{{^required}}?{{/required}}
+    {{/queryParams}}
 
-    public init({{#queryParams}}
-            {{paramName}}: {{dataType}}{{> AddOptionalMark.snippet}} {{#defaultValue}} = {{> ParamDefaultValue.snippet}} {{/defaultValue}}{{#hasMore}}, {{/hasMore}}
-            {{/queryParams}}) {
-{{#queryParams}}
-    self.{{paramName}} = {{paramName}}
-{{/queryParams}}
-        super.init()
-    }
-
-    convenience init?(source: Any?) {
-        guard let source = source as? SourceType else { return nil }
-
-        guard
-            {{#queryParams}}{{#required}}
-                let {{paramName}} = source["{{paramName}}"] as? {{dataType}}{{#hasMore}}, {{/hasMore}}
-            {{/required}}{{/queryParams}}
-        else {
-            return nil
-        }
-
-        self.init(
+        public init({{#queryParams}}{{paramName}}: {{dataType}}{{^required}}?{{/required}}{{> ParamRequiredDefaultValue.snippet}}{{#hasMore}}, {{/hasMore}}{{/queryParams}}) {
             {{#queryParams}}
-                {{#required}}
-                    {{paramName}}: {{paramName}}{{#hasMore}},{{/hasMore}}
-                {{/required}}
-                {{^required}}
-                    {{paramName}}: source["{{paramName}}"] as? {{dataType}} {{#defaultValue}} ?? {{> ParamDefaultValue.snippet}} {{/defaultValue}} {{#hasMore}}, {{/hasMore}}
-                {{/required}}
+            self.{{paramName}} = {{paramName}}
             {{/queryParams}}
-        )
+        }
     }
-
-    override public var definition: [String: Any?] {
-        return [
-        {{#queryParams}}
-            "{{paramName}}": {{paramName}}{{#hasMore}},{{/hasMore}}
-        {{/queryParams}}
-        ]
-    }
-}
 {{/hasQueryParams}}

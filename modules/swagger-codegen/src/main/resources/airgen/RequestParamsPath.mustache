@@ -1,43 +1,18 @@
 
 {{#hasPathParams}}
-@objc({{classname}}Path)
-public class Path: AirGenPath {
 
-{{#pathParams}}
-    public let {{paramName}}: {{{dataType}}}{{^required}}?{{/required}}
-{{/pathParams}}
+    public struct Path: Codable {
 
-    public init({{#pathParams}}
-            {{paramName}}: {{dataType}}{{^required}}?{{/required}} {{#defaultValue}} = {{#isString}}"{{/isString}}{{{defaultValue}}}{{#isString}}"{{/isString}}{{/defaultValue}}{{#hasMore}}, {{/hasMore}}{{/pathParams}}) {
-{{#pathParams}}
-    self.{{paramName}} = {{paramName}}
-{{/pathParams}}
-        super.init()
-    }
+    {{#pathParams}}
+        {{#description}}/** {{description}} */
+        {{/description}}public let {{paramName}}: {{dataType}}{{^required}}?{{/required}}
+    {{/pathParams}}
 
-    convenience init?(source: Any?) {
-        guard
-            let source = source as? SourceType{{#hasParams}},{{/hasParams}}
+        public init({{#pathParams}}{{paramName}}: {{dataType}}{{^required}}?{{/required}}{{> ParamRequiredDefaultValue.snippet}}{{#hasMore}}, {{/hasMore}}{{/pathParams}}) {
             {{#pathParams}}
-                let {{paramName}} = source["{{paramName}}"] as? {{dataType}}{{^required}}?{{/required}}{{#hasMore}}, {{/hasMore}}
+            self.{{paramName}} = {{paramName}}
             {{/pathParams}}
-        else {
-            return nil
         }
-
-        self.init(
-            {{#pathParams}}
-                {{paramName}}: {{paramName}}{{#hasMore}},{{/hasMore}}
-            {{/pathParams}}
-        )
     }
 
-    override public var definition: [String: Any?] {
-        return [
-        {{#pathParams}}
-            "{{paramName}}": {{paramName}}{{#hasMore}},{{/hasMore}}
-        {{/pathParams}}
-        ]
-    }
-}
 {{/hasPathParams}}
