@@ -1,0 +1,54 @@
+{{#hasHeaderParams}}
+@objc({{classname}}Header)
+public class Headers: AirGenHeader {
+
+{{#headerParams}}
+    public let {{paramName}}: {{{dataType}}}{{^required}}?{{/required}}
+{{/headerParams}}
+
+    public init({{#headerParams}}
+            {{paramName}}: {{dataType}}{{^required}}?{{/required}} {{#defaultValue}} = {{#isString}}"{{/isString}}{{{defaultValue}}}{{#isString}}"{{/isString}}{{/defaultValue}}{{#hasMore}}, {{/hasMore}}{{/headerParams}}) {
+{{#headerParams}}
+    self.{{paramName}} = {{paramName}}
+{{/headerParams}}
+        super.init()
+    }
+
+    convenience init?(source: Any?) {
+        self.init(source: source as? [String:String])
+    }
+
+    convenience init?(source: [String:String]?) {
+        guard
+            let source = source{{#hasParams}},{{/hasParams}}
+            {{#headerParams}}
+            {{#required}}
+                let {{paramName}}:{{dataType}} = source["{{paramName}}"]{{#hasMore}}, {{/hasMore}}
+            {{/required}}
+            {{/headerParams}}
+        else {
+            return nil
+        }
+
+        {{#headerParams}}
+        {{^required}}
+            let {{paramName}}:{{dataType}}? = source["{{paramName}}"]
+        {{/required}}
+        {{/headerParams}}
+
+        self.init(
+            {{#headerParams}}
+                {{paramName}}: {{paramName}}{{#hasMore}},{{/hasMore}}
+            {{/headerParams}}
+        )
+    }
+
+    override public var definition: [String: Any?] {
+        return [
+        {{#headerParams}}
+            "{{paramName}}": {{paramName}}{{#hasMore}},{{/hasMore}}
+        {{/headerParams}}
+        ]
+    }
+}
+{{/hasHeaderParams}}
