@@ -1,13 +1,15 @@
 {{#hasPathParams}}
-public class Path: NSObject, Codable {
-{{#pathParams}}
-    {{#description}}/** {{description}} */
-    {{/description}}public let {{paramName}}: {{dataType}}{{^required}}?{{/required}}
-{{/pathParams}}
-    public init({{#pathParams}}{{paramName}}: {{dataType}}{{^required}}?{{/required}}{{> ParamRequiredDefaultValue.snippet}}{{#hasMore}}, {{/hasMore}}{{/pathParams}}) {
-        {{#pathParams}}
-        self.{{paramName}} = {{paramName}}
-        {{/pathParams}}
+public extension {{operationIdCamelCase}}Request.URL {
+    public class Path: NSObject, Codable {
+    {{#pathParams}}
+        {{#description}}/** {{description}} */
+        {{/description}}public let {{paramName}}: {{dataType}}{{^required}}?{{/required}}
+    {{/pathParams}}
+        public init({{#pathParams}}{{paramName}}: {{dataType}}{{^required}}?{{/required}}{{> ParamRequiredDefaultValue.snippet}}{{#hasMore}}, {{/hasMore}}{{/pathParams}}) {
+            {{#pathParams}}
+            self.{{paramName}} = {{paramName}}
+            {{/pathParams}}
+        }
     }
 }
 {{/hasPathParams}}

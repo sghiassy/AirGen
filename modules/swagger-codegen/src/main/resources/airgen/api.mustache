@@ -22,34 +22,27 @@ import AirGap
 {{#operation}}
 public class {{operationIdCamelCase}}Request: NSObject, Codable {
 
-    public static let verb: RequestType = .{{httpMethod}}
-    public static let urlDefinition: String = "{{basePath}}{{{path}}}"
-    public var absoluteStringURL: String { return AbsoluteStringURL(urlDefinition: {{operationIdCamelCase}}Request.urlDefinition, params: "self.path.serialize()") }
-    public var absoluteURL: URL { return URL(string: self.absoluteStringURL)! } // Note: The URL explicit unwrap is safe here, since all objects are immutable and can't be allocated until the compiler ensures they meet the Swagger Spec
+    {{> RequestURL}}
 
-    {{> RequestParamsPath}}
-    {{> RequestParamsHeader}}
-    {{> RequestParamsQuery}}
-
-{{#hasPathParams}}
-    public let path: {{operationIdCamelCase}}Request.Path{{/hasPathParams}}{{#hasQueryParams}}
-    public let query: {{operationIdCamelCase}}Request.Query{{/hasQueryParams}}{{#hasHeaderParams}}
+    public let url:  {{operationIdCamelCase}}Request.URL{{#hasHeaderParams}}
     public let headers: {{operationIdCamelCase}}Request.Headers{{/hasHeaderParams}}{{#hasBodyParam}}
-    public let body: {{#bodyParam}}{{dataType}}{{/bodyParam}}{{/hasBodyParam}}
-    {{#hasParams}}
-    public init({{#hasPathParams}}
-        path: {{operationIdCamelCase}}Request.Path{{/hasPathParams}}{{#hasHeaderParams}}{{#hasPathParams}}, {{/hasPathParams}}
-        headers: {{operationIdCamelCase}}Request.Headers{{/hasHeaderParams}}{{#hasQueryParams}}{{#hasPathParams}}, {{/hasPathParams}}
-        query: {{operationIdCamelCase}}Request.Query{{#hasBodyParam}},{{/hasBodyParam}}{{/hasQueryParams}}{{#hasBodyParam}}
-        body: {{#bodyParam}}{{dataType}}{{/bodyParam}}{{/hasBodyParam}}) { {{#hasBodyParam}}
-            self.body = body{{/hasBodyParam}}{{#hasPathParams}}
-            self.path = path{{/hasPathParams}}{{#hasHeaderParams}}
-            self.headers = headers{{/hasHeaderParams}}{{#hasParams}}
-            self.query = query{{/hasParams}}
+    public let body: {{#bodyParam}}{{dataType}}{{/bodyParam}}
+    {{/hasBodyParam}}{{#hasParams}}
+    public init(
+        url: {{operationIdCamelCase}}Request.URL{{#hasHeaderParams}},
+        headers: {{operationIdCamelCase}}Request.Headers{{/hasHeaderParams}}{{#hasBodyParam}},
+        body: {{#bodyParam}}{{dataType}}{{/bodyParam}}{{/hasBodyParam}}) {
+            self.url = url{{#hasHeaderParams}}
+            self.headers = headers{{/hasHeaderParams}}{{#hasBodyParam}}
+            self.body = body{{/hasBodyParam}}
         super.init()
     }
     {{/hasParams}}
 }
+
+{{> RequestParamsPath}}
+{{> RequestParamsQuery}}
+{{> RequestParamsHeader}}
 {{/operation}}
 
 fileprivate func AbsoluteStringURL(urlDefinition: String, params: [String:String]) -> String {

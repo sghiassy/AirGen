@@ -1,13 +1,15 @@
 {{#hasQueryParams}}
-public class Query: NSObject, Codable {
-{{#queryParams}}
-    {{#description}}/** {{description}} */
-    {{/description}}public let {{paramName}}: {{dataType}}{{^required}}?{{/required}}
-{{/queryParams}}
-    public init({{#queryParams}}{{paramName}}: {{dataType}}{{^required}}?{{/required}}{{> ParamRequiredDefaultValue.snippet}}{{#hasMore}}, {{/hasMore}}{{/queryParams}}) {
-        {{#queryParams}}
-        self.{{paramName}} = {{paramName}}
-        {{/queryParams}}
+public extension {{operationIdCamelCase}}Request.URL {
+    public class Query: NSObject, Codable {
+    {{#queryParams}}
+        {{#description}}/** {{description}} */
+        {{/description}}public let {{paramName}}: {{dataType}}{{^required}}?{{/required}}
+    {{/queryParams}}
+        public init({{#queryParams}}{{paramName}}: {{dataType}}{{^required}}?{{/required}}{{> ParamRequiredDefaultValue.snippet}}{{#hasMore}}, {{/hasMore}}{{/queryParams}}) {
+            {{#queryParams}}
+            self.{{paramName}} = {{paramName}}
+            {{/queryParams}}
+        }
     }
 }
 {{/hasQueryParams}}
