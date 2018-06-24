@@ -1,4 +1,4 @@
-public struct {{classname}}: Codable {
+public class {{classname}}: NSObject, Codable {
 {{#allVars}}
 {{#isEnum}}
 {{> modelInlineEnumDeclaration}}
