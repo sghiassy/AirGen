@@ -20,113 +20,36 @@ import AirGap
 {{> RequestsBaseObjects}}
 
 {{#operation}}
-public class {{operationIdCamelCase}}Request: AirGenRequest {
+public class {{operationIdCamelCase}}Request: NSObject, Codable {
 
     public static let verb: RequestType = .{{httpMethod}}
     public static let urlDefinition: String = "{{basePath}}{{{path}}}"
-    public var absoluteStringURL: String { return AbsoluteStringURL(urlDefinition: self.urlDefinition, params: self.path.serialize()) }
+    public var absoluteStringURL: String { return AbsoluteStringURL(urlDefinition: {{operationIdCamelCase}}Request.urlDefinition, params: "self.path.serialize()") }
     public var absoluteURL: URL { return URL(string: self.absoluteStringURL)! } // Note: The URL explicit unwrap is safe here, since all objects are immutable and can't be allocated until the compiler ensures they meet the Swagger Spec
 
-{{> RequestParamsPath}}
-{{> RequestParamsHeader}}
-{{> RequestParamsQuery}}
+    {{> RequestParamsPath}}
+    {{> RequestParamsHeader}}
+    {{> RequestParamsQuery}}
 
 {{#hasPathParams}}
-    public let path: {{operationIdCamelCase}}Request.Path
-{{/hasPathParams}}
-{{^hasPathParams}}
-    public let path = AirGenPath()
-{{/hasPathParams}}
-{{#hasQueryParams}}
-    public let query: {{operationIdCamelCase}}Request.Query
-{{/hasQueryParams}}
-{{^hasQueryParams}}
-    public let query = AirGenQuery()
-{{/hasQueryParams}}
-{{#hasHeaderParams}}
-    public let headers: {{operationIdCamelCase}}Request.Headers
-{{/hasHeaderParams}}
-{{#hasBodyParam}}
-    public let body: {{#bodyParam}}{{dataType}}{{/bodyParam}}
-{{/hasBodyParam}}
-
+    public let path: {{operationIdCamelCase}}Request.Path{{/hasPathParams}}{{#hasQueryParams}}
+    public let query: {{operationIdCamelCase}}Request.Query{{/hasQueryParams}}{{#hasHeaderParams}}
+    public let headers: {{operationIdCamelCase}}Request.Headers{{/hasHeaderParams}}{{#hasBodyParam}}
+    public let body: {{#bodyParam}}{{dataType}}{{/bodyParam}}{{/hasBodyParam}}
     {{#hasParams}}
-    public init(
-        {{#hasPathParams}}path: {{operationIdCamelCase}}Request.Path{{/hasPathParams}}
-        {{#hasHeaderParams}}{{#hasPathParams}}, {{/hasPathParams}}headers: {{operationIdCamelCase}}Request.Headers{{/hasHeaderParams}}
-        {{#hasQueryParams}}{{#hasPathParams}}, {{/hasPathParams}}query: {{operationIdCamelCase}}Request.Query{{#hasBodyParam}},{{/hasBodyParam}}{{/hasQueryParams}}
-        {{#hasBodyParam}}body: {{#bodyParam}}{{dataType}}{{/bodyParam}}{{/hasBodyParam}}) {
-        {{#hasBodyParam}}
-            self.body = body
-        {{/hasBodyParam}}
-        {{#hasPathParams}}
-            self.path = path
-        {{/hasPathParams}}
-        {{#hasHeaderParams}}
-            self.headers = headers
-        {{/hasHeaderParams}}
-        {{#hasParams}}
-            self.query = query
-        {{/hasParams}}
-        super.init(verb: {{operationIdCamelCase}}Request.verb, urlDefinition: {{operationIdCamelCase}}Request.urlDefinition)
+    public init({{#hasPathParams}}
+        path: {{operationIdCamelCase}}Request.Path{{/hasPathParams}}{{#hasHeaderParams}}{{#hasPathParams}}, {{/hasPathParams}}
+        headers: {{operationIdCamelCase}}Request.Headers{{/hasHeaderParams}}{{#hasQueryParams}}{{#hasPathParams}}, {{/hasPathParams}}
+        query: {{operationIdCamelCase}}Request.Query{{#hasBodyParam}},{{/hasBodyParam}}{{/hasQueryParams}}{{#hasBodyParam}}
+        body: {{#bodyParam}}{{dataType}}{{/bodyParam}}{{/hasBodyParam}}) { {{#hasBodyParam}}
+            self.body = body{{/hasBodyParam}}{{#hasPathParams}}
+            self.path = path{{/hasPathParams}}{{#hasHeaderParams}}
+            self.headers = headers{{/hasHeaderParams}}{{#hasParams}}
+            self.query = query{{/hasParams}}
+        super.init()
     }
     {{/hasParams}}
-
-    {{#hasParams}}
-    convenience init?(source: Any) {
-        guard
-            let source = source as? SourceType{{#hasParams}},{{/hasParams}}
-            {{#hasBodyParam}}
-            let body = {{#bodyParam}}{{dataType}}{{/bodyParam}}(source: source["body"]),
-            {{/hasBodyParam}}
-            {{#hasPathParams}}
-            let path = {{operationIdCamelCase}}Request.Path(source: source["path"]),
-            {{/hasPathParams}}
-            {{#hasHeaderParams}}
-            let headers = {{operationIdCamelCase}}Request.Headers(source: source["headers"]),
-            {{/hasHeaderParams}}
-            {{#hasQueryParams}}
-            let query = {{operationIdCamelCase}}Request.Query(source: source["query"])
-            {{/hasQueryParams}}
-        else {
-            return nil
-        }
-
-        self.init(
-            {{#hasPathParams}}
-                path: path
-            {{/hasPathParams}}
-            {{#hasHeaderParams}}
-                {{#hasPathParams}}, {{/hasPathParams}}
-                headers: headers
-            {{/hasHeaderParams}}
-            {{#hasQueryParams}}
-                {{#hasPathParams}}, {{/hasPathParams}}
-                query: query{{#hasBodyParam}},{{/hasBodyParam}}
-            {{/hasQueryParams}}
-            {{#hasBodyParam}}
-                body: body
-            {{/hasBodyParam}})
-    }
-    {{/hasParams}}
-
-    override public var description: String {
-        return """
-        URL: \(self.verb): \(self.urlDefinition)
-        {{#hasHeaderParams}}
-        HEADERS: \(self.headers)
-        {{/hasHeaderParams}}
-        {{#hasParams}}
-        PARAMS: \(self.query)
-        {{/hasParams}}
-        {{#hasBodyParam}}
-        BODY: \(self.body)
-        {{/hasBodyParam}}
-        """
-    }
-
 }
-
 {{/operation}}
 
 fileprivate func AbsoluteStringURL(urlDefinition: String, params: [String:String]) -> String {

@@ -1,17 +1,13 @@
 {{#hasHeaderParams}}
-
-    public struct Headers: Codable {
-
-    {{#headerParams}}
-        {{#description}}/** {{description}} */
-        {{/description}}public let {{paramName}}: {{dataType}}{{^required}}?{{/required}}
-    {{/headerParams}}
-
-        public init({{#headerParams}}{{paramName}}: {{dataType}}{{^required}}?{{/required}}{{> ParamRequiredDefaultValue.snippet}}{{#hasMore}}, {{/hasMore}}{{/headerParams}}) {
-            {{#headerParams}}
-            self.{{paramName}} = {{paramName}}
-            {{/headerParams}}
-        }
+public class Headers: NSObject, Codable {
+{{#headerParams}}
+    {{#description}}/** {{description}} */
+    {{/description}}public let {{paramName}}: {{dataType}}{{^required}}?{{/required}}
+{{/headerParams}}
+    public init({{#headerParams}}{{paramName}}: {{dataType}}{{^required}}?{{/required}}{{> ParamRequiredDefaultValue.snippet}}{{#hasMore}}, {{/hasMore}}{{/headerParams}}) {
+        {{#headerParams}}
+        self.{{paramName}} = {{paramName}}
+        {{/headerParams}}
     }
-
+}
 {{/hasHeaderParams}}

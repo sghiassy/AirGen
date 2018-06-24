@@ -1,5 +1,4 @@
 public struct {{classname}}: Codable {
-
 {{#allVars}}
 {{#isEnum}}
 {{> modelInlineEnumDeclaration}}
@@ -20,7 +19,6 @@ public struct {{classname}}: Codable {
     }{{/vendorExtensions.x-swift-optional-scalar}}{{/objcCompatible}}
 {{/isEnum}}
 {{/allVars}}
-
 {{#hasVars}}
     public init({{#allVars}}{{name}}: {{{datatypeWithEnum}}}{{^required}}?{{/required}}{{#hasMore}}, {{/hasMore}}{{/allVars}}) {
         {{#allVars}}
@@ -28,54 +26,4 @@ public struct {{classname}}: Codable {
         {{/allVars}}
     }
 {{/hasVars}}
-{{#additionalPropertiesType}}
-    public let additionalProperties: [String:{{{additionalPropertiesType}}}] = [:]
-
-    public subscript(key: String) -> {{{additionalPropertiesType}}}? {
-        get {
-            if let value = additionalProperties[key] {
-                return value
-            }
-            return nil
-        }
-
-        set {
-            additionalProperties[key] = newValue
-        }
-    }
-
-    // Encodable protocol methods
-
-    public func encode(to encoder: Encoder) throws {
-
-        let container = encoder.container(keyedBy: String.self)
-
-        {{#allVars}}
-        try container.encode{{^required}}IfPresent{{/required}}({{{name}}}, forKey: "{{{baseName}}}")
-        {{/allVars}}
-        try container.encodeMap(additionalProperties)
-    }
-
-    // Decodable protocol methods
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: String.self)
-
-        {{#allVars}}
-        {{name}} = try container.decode{{^required}}IfPresent{{/required}}({{{datatypeWithEnum}}}.self, forKey: "{{{baseName}}}")
-        {{/allVars}}
-        let nonAdditionalPropertyKeys = Set<String>()
-        {{#allVars}}
-        nonAdditionalPropertyKeys.insert("{{{baseName}}}")
-        {{/allVars}}
-        additionalProperties = try container.decodeMap({{{additionalPropertiesType}}}.self, excludedKeys: nonAdditionalPropertyKeys)
-    }
-
-{{/additionalPropertiesType}}
-{{^additionalPropertiesType}}{{#vendorExtensions.x-codegen-has-escaped-property-names}}
-    public enum CodingKeys: String, CodingKey { {{#allVars}}
-        case {{name}}{{#vendorExtensions.x-codegen-escaped-property-name}} = "{{{baseName}}}"{{/vendorExtensions.x-codegen-escaped-property-name}}{{/allVars}}
-    }
-{{/vendorExtensions.x-codegen-has-escaped-property-names}}{{/additionalPropertiesType}}
-
 }
