@@ -1,5 +1,7 @@
 {{#hasHeaderParams}}
 public extension {{operationIdCamelCase}}Request {
+
+    @objc({{operationIdCamelCase}}RequestHeader)
     public class Headers: NSObject, Codable {
     {{#headerParams}}
         {{#description}}/** {{description}} */

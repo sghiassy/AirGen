@@ -1,5 +1,7 @@
 {{#hasPathParams}}
 public extension {{operationIdCamelCase}}Request.URL {
+
+    @objc({{operationIdCamelCase}}RequestPath)
     public class Path: NSObject, Codable {
     {{#pathParams}}
         {{#description}}/** {{description}} */

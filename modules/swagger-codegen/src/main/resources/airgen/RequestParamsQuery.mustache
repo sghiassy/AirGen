@@ -1,5 +1,7 @@
 {{#hasQueryParams}}
 public extension {{operationIdCamelCase}}Request.URL {
+
+    @objc({{operationIdCamelCase}}RequestQuery)
     public class Query: NSObject, Codable {
     {{#queryParams}}
         {{#description}}/** {{description}} */
