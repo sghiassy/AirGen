@@ -1,7 +1,6 @@
 @objc({{operationIdCamelCase}}RequestURL)
 public class URL: NSObject, Codable {
 
-    public static let verb: RequestType = .{{httpMethod}}
     public static let Definition: String = "{{basePath}}{{{path}}}"
 
     public var absoluteStringURL: String { return AbsoluteStringURL(urlDefinition: {{operationIdCamelCase}}Request.URL.Definition, params: ["":"self.path.serialize()"]) }

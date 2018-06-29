@@ -24,6 +24,7 @@ public class {{operationIdCamelCase}}Request: NSObject, Codable {
 
     {{> RequestURL}}
 
+    public static let verb: RequestType = .{{httpMethod}}
     public let url:  {{operationIdCamelCase}}Request.URL{{#hasHeaderParams}}
     public let headers: {{operationIdCamelCase}}Request.Headers{{/hasHeaderParams}}{{#hasBodyParam}}
     public let body: {{#bodyParam}}{{dataType}}{{/bodyParam}}{{/hasBodyParam}}
