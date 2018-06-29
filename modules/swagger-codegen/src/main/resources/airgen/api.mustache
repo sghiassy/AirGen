@@ -45,22 +45,43 @@ public class {{operationIdCamelCase}}Request: NSObject, Codable {
 {{> RequestParamsHeader}}
 {{/operation}}
 
-fileprivate func AbsoluteStringURL(urlDefinition: String, params: [String:String]) -> String {
-    var split: [String] = urlDefinition.split(separator: "/").map({ String($0) })
-    split = split.map({ el in
+fileprivate func urlString(from urlDefinition: String, pathParams: [String:String]?) -> String {
+    guard let pathParams = pathParams else { return urlDefinition }
+
+    var urlPathKeys: [String] = urlDefinition.split(separator: "/") // Split the URL by '/' slash token
+                                             .map({ String($0) }) // Manually convert the StringSequence type returned by the split function to a regular String type
+    urlPathKeys = urlPathKeys.map({ el in
         if el.first == ":" {
-            return params[String(el.dropFirst())]!
+            return pathParams[String(el.dropFirst())]!
         } else {
             return el
         }
     })
-    split[0] = split[0] + "/"
-    return split.joined(separator: "/")
+    urlPathKeys[0] = urlPathKeys[0] + "/"
+    return urlPathKeys.joined(separator: "/")
 }
 
-fileprivate func AbsoluteURL(urlDefinition: String, params: [String:String]) -> URL {
-    return URL(string: AbsoluteStringURL(urlDefinition:urlDefinition, params:params))!
+
+fileprivate func AbsoluteStringURL(urlDefinition: String, pathParams: [String:String]?, queryParams:[String:String]?) -> String {
+    return urlString(from: urlDefinition, pathParams: pathParams) + queryString(from: queryParams)
 }
+
+fileprivate func AbsoluteURL(urlDefinition: String, pathParams: [String:String]?, queryParams:[String:String]?) -> URL {
+    return URL(string: AbsoluteStringURL(urlDefinition: urlDefinition, pathParams: pathParams, queryParams: queryParams))!
+}
+
+public extension Encodable {
+    var asDictionary: [String: Any]? {
+        guard let data = try? JSONEncoder().encode(self) else { return nil }
+        return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap { $0 as? [String: Any] }
+    }
+    var asStringDictionary: [String:String]? {
+        return self.asDictionary?.mapValues({ (val) -> String in
+            return "\(val)"
+        })
+    }
+}
+
 
 {{/operations}}
 
