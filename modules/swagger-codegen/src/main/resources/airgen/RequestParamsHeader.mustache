@@ -1,11 +1,13 @@
 {{#hasHeaderParams}}
 public extension {{operationIdCamelCase}}Request {
+
+    @objc({{operationIdCamelCase}}RequestHeader)
     public class Headers: NSObject, Codable {
     {{#headerParams}}
         {{#description}}/** {{description}} */
-        {{/description}}public let {{paramName}}: {{> RequestParamsEnumType.snippet}}{{^required}}?{{/required}}
+        {{/description}}public let {{paramName}}: {{> RequestParamsEnumType.snippet}}{{> Optional.snippet}}
     {{/headerParams}}
-        public init({{#headerParams}}{{paramName}}: {{> RequestParamsEnumType.snippet}}{{^required}}?{{/required}}{{> ParamRequiredDefaultValue.snippet}}{{#hasMore}}, {{/hasMore}}{{/headerParams}}) {
+        public init({{#headerParams}}{{paramName}}: {{> RequestParamsEnumType.snippet}}{{> Optional.snippet}}{{> ParamRequiredDefaultValue.snippet}}{{#hasMore}}, {{/hasMore}}{{/headerParams}}) {
             {{#headerParams}}
             self.{{paramName}} = {{paramName}}
             {{/headerParams}}

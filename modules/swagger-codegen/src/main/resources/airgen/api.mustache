@@ -20,11 +20,11 @@ import AirGap
 {{> RequestsBaseObjects}}
 
 {{#operation}}
-{{> RequestParamsEnum}}
 public class {{operationIdCamelCase}}Request: NSObject, Codable {
 
     {{> RequestURL}}
 
+    public static let verb: RequestType = .{{httpMethod}}
     public let url:  {{operationIdCamelCase}}Request.URL{{#hasHeaderParams}}
     public let headers: {{operationIdCamelCase}}Request.Headers{{/hasHeaderParams}}{{#hasBodyParam}}
     public let body: {{#bodyParam}}{{dataType}}{{/bodyParam}}{{/hasBodyParam}}
@@ -45,22 +45,7 @@ public class {{operationIdCamelCase}}Request: NSObject, Codable {
 {{> RequestParamsHeader}}
 {{/operation}}
 
-fileprivate func AbsoluteStringURL(urlDefinition: String, params: [String:String]) -> String {
-    var split: [String] = urlDefinition.split(separator: "/").map({ String($0) })
-    split = split.map({ el in
-        if el.first == ":" {
-            return params[String(el.dropFirst())]!
-        } else {
-            return el
-        }
-    })
-    split[0] = split[0] + "/"
-    return split.joined(separator: "/")
-}
-
-fileprivate func AbsoluteURL(urlDefinition: String, params: [String:String]) -> URL {
-    return URL(string: AbsoluteStringURL(urlDefinition:urlDefinition, params:params))!
-}
+{{> APIRequestHelperFunctions}}
 
 {{/operations}}
 

@@ -1,9 +1,9 @@
+@objc({{operationIdCamelCase}}RequestURL)
 public class URL: NSObject, Codable {
 
-    public static let verb: RequestType = .{{httpMethod}}
     public static let Definition: String = "{{basePath}}{{{path}}}"
 
-    public var absoluteStringURL: String { return AbsoluteStringURL(urlDefinition: {{operationIdCamelCase}}Request.URL.Definition, params: ["":"self.path.serialize()"]) }
+    public var absoluteStringURL: String { return AbsoluteStringURL(urlDefinition: {{operationIdCamelCase}}Request.URL.Definition, pathParams:{{#hasPathParams}}self.path.asStringDictionary{{/hasPathParams}}{{^hasPathParams}}nil{{/hasPathParams}}, queryParams:{{#hasQueryParams}}self.query.asStringDictionary{{/hasQueryParams}}{{^hasQueryParams}}nil{{/hasQueryParams}}) }
     public var absoluteURL: Foundation.URL { return Foundation.URL(string: self.absoluteStringURL)! } // Note: The URL explicit unwrap is safe here, since all objects are immutable and can't be allocated until the compiler ensures they meet the Swagger Spec
     {{#hasPathParams}}
     public let path: {{operationIdCamelCase}}Request.URL.Path{{/hasPathParams}}{{#hasQueryParams}}

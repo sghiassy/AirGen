@@ -1,11 +1,13 @@
 {{#hasQueryParams}}
 public extension {{operationIdCamelCase}}Request.URL {
+
+    @objc({{operationIdCamelCase}}RequestQuery)
     public class Query: NSObject, Codable {
     {{#queryParams}}
         {{#description}}/** {{description}} */
-        {{/description}}public let {{paramName}}: {{> RequestParamsEnumType.snippet}}{{^required}}?{{/required}}
+        {{/description}}public let {{paramName}}: {{> RequestParamsEnumType.snippet}}{{> Optional.snippet}}
     {{/queryParams}}
-        public init({{#queryParams}}{{paramName}}: {{> RequestParamsEnumType.snippet}}{{^required}}?{{/required}}{{> ParamRequiredDefaultValue.snippet}}{{#hasMore}}, {{/hasMore}}{{/queryParams}}) {
+        public init({{#queryParams}}{{paramName}}: {{> RequestParamsEnumType.snippet}}{{> Optional.snippet}}{{> ParamRequiredDefaultValue.snippet}}{{#hasMore}}, {{/hasMore}}{{/queryParams}}) {
             {{#queryParams}}
             self.{{paramName}} = {{paramName}}
             {{/queryParams}}

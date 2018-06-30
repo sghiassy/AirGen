@@ -1,11 +1,13 @@
 {{#hasPathParams}}
 public extension {{operationIdCamelCase}}Request.URL {
+
+    @objc({{operationIdCamelCase}}RequestPath)
     public class Path: NSObject, Codable {
     {{#pathParams}}
         {{#description}}/** {{description}} */
-        {{/description}}public let {{paramName}}: {{> RequestParamsEnumType.snippet}}{{^required}}?{{/required}}
+        {{/description}}public let {{paramName}}: {{> RequestParamsEnumType.snippet}}{{> Optional.snippet}}
     {{/pathParams}}
-        public init({{#pathParams}}{{paramName}}: {{> RequestParamsEnumType.snippet}}{{^required}}?{{/required}}{{> ParamRequiredDefaultValue.snippet}}{{#hasMore}}, {{/hasMore}}{{/pathParams}}) {
+        public init({{#pathParams}}{{paramName}}: {{> RequestParamsEnumType.snippet}}{{> Optional.snippet}}{{> ParamRequiredDefaultValue.snippet}}{{#hasMore}}, {{/hasMore}}{{/pathParams}}) {
             {{#pathParams}}
             self.{{paramName}} = {{paramName}}
             {{/pathParams}}

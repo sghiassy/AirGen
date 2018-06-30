@@ -5,25 +5,14 @@ public class {{classname}}: NSObject, Codable {
 {{/isEnum}}
 {{/allVars}}
 {{#allVars}}
-{{#isEnum}}
     {{#description}}/** {{description}} */
-    {{/description}}public let {{name}}: {{{datatypeWithEnum}}}{{^required}}?{{/required}}{{#defaultValue}} = {{{defaultValue}}}{{/defaultValue}}
-{{/isEnum}}
-{{^isEnum}}
-    {{#description}}/** {{description}} */
-    {{/description}}public let {{name}}: {{{datatype}}}{{^required}}?{{/required}}{{#defaultValue}} = {{{defaultValue}}}{{/defaultValue}}{{#objcCompatible}}{{#vendorExtensions.x-swift-optional-scalar}}
-    public let {{name}}Num: NSNumber? {
-        get {
-            return {{name}}.map({ return NSNumber(value: $0) })
-        }
-    }{{/vendorExtensions.x-swift-optional-scalar}}{{/objcCompatible}}
-{{/isEnum}}
+    {{/description}}public let {{name}}: {{> ModelObjectEnumType.snippet}}{{> Optional.snippet}}
 {{/allVars}}
 {{#hasVars}}
-    public init({{#allVars}}{{name}}: {{{datatypeWithEnum}}}{{^required}}?{{/required}}{{#hasMore}}, {{/hasMore}}{{/allVars}}) {
+    public init({{#allVars}}{{name}}: {{> ModelObjectEnumType.snippet}}{{> Optional.snippet}}{{> ParamRequiredDefaultValue.snippet}}{{#hasMore}}, {{/hasMore}}{{/allVars}}) {
         {{#allVars}}
         self.{{name}} = {{name}}
         {{/allVars}}
     }
-{{/hasVars}}
 }
+{{/hasVars}}
