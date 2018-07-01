@@ -1,4 +1,8 @@
-fileprivate func queryString(from queryParams:[String:String]?) -> String {
+
+
+
+
+internal func queryString(from queryParams:[String:String]?) -> String {
     guard let queryParams = queryParams else { return "" }
 
     // Wrap the whole thing in a string to avoid return SubStringSequenceType (i.e: because of the dropLast function)
@@ -11,7 +15,7 @@ fileprivate func queryString(from queryParams:[String:String]?) -> String {
     )
 }
 
-fileprivate func urlString(from urlDefinition: String, pathParams: [String:String]?) -> String {
+internal func urlString(from urlDefinition: String, pathParams: [String:String]?) -> String {
     guard let pathParams = pathParams else { return urlDefinition }
 
     var urlPathKeys: [String] = urlDefinition.split(separator: "/") // Split the URL by '/' slash token
@@ -28,11 +32,11 @@ fileprivate func urlString(from urlDefinition: String, pathParams: [String:Strin
 }
 
 
-fileprivate func AbsoluteStringURL(urlDefinition: String, pathParams: [String:String]?, queryParams:[String:String]?) -> String {
+internal func AbsoluteStringURL(urlDefinition: String, pathParams: [String:String]?, queryParams:[String:String]?) -> String {
     return urlString(from: urlDefinition, pathParams: pathParams) + queryString(from: queryParams)
 }
 
-fileprivate func AbsoluteURL(urlDefinition: String, pathParams: [String:String]?, queryParams:[String:String]?) -> URL {
+internal func AbsoluteURL(urlDefinition: String, pathParams: [String:String]?, queryParams:[String:String]?) -> URL {
     return URL(string: AbsoluteStringURL(urlDefinition: urlDefinition, pathParams: pathParams, queryParams: queryParams))!
 }
 
