@@ -45,6 +45,9 @@ public class {{operationIdCamelCase}}Request: NSObject, Codable {
             self.body = body{{/hasBodyParam}}
         super.init()
     }
+
+    var asData: Data { return try! JSONEncoder().encode(self) }// AirGen objects have guaranteed data consistency so we can assert this won't throw
+    var asRawString: String { return String(data: self.asData, encoding: .utf8)! } // AirGen objects have guaranteed data consistency so we can assert this won't throw
 }
 
 {{> RequestParamsPath}}
