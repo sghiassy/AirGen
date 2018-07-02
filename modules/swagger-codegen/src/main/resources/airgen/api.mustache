@@ -20,6 +20,13 @@ import AirGap
 {{> RequestsBaseObjects}}
 
 {{#operation}}
+    /**
+     {{#summary}}
+     {{{summary}}}
+     {{/summary}}{{#allParams}}
+     - {{paramName}}: ({{#isFormParam}}form{{/isFormParam}}{{#isQueryParam}}query{{/isQueryParam}}{{#isPathParam}}path{{/isPathParam}}{{#isHeaderParam}}header{{/isHeaderParam}}{{#isBodyParam}}body{{/isBodyParam}}) {{{description}}} {{^required}}(optional{{#defaultValue}}, default to {{{.}}}{{/defaultValue}}){{/required}}{{/allParams}}
+     */
+@objc(AG{{operationIdCamelCase}}Request)
 public class {{operationIdCamelCase}}Request: NSObject, Codable {
 
     {{> RequestURL}}
@@ -43,6 +50,29 @@ public class {{operationIdCamelCase}}Request: NSObject, Codable {
 {{> RequestParamsPath}}
 {{> RequestParamsQuery}}
 {{> RequestParamsHeader}}
+
+/*
+ *    ____     __               _
+ *   / __/_ __/ /____ ___  ___ (_)__  ___  ___
+ *  / _/ \ \ / __/ -_) _ \(_-</ / _ \/ _ \(_-<
+ * /___//_\_\\__/\__/_//_/___/_/\___/_//_/___/
+ */
+
+public extension {{operationIdCamelCase}}Request.URL {
+    public var absoluteStringURL: String { return AbsoluteStringURL(urlDefinition: {{operationIdCamelCase}}Request.URL.Definition, pathParams:{{#hasPathParams}}self.path.asStringDictionary{{/hasPathParams}}{{^hasPathParams}}nil{{/hasPathParams}}, queryParams:{{#hasQueryParams}}self.query.asStringDictionary{{/hasQueryParams}}{{^hasQueryParams}}nil{{/hasQueryParams}}) }
+    public var absoluteURL: Foundation.URL { return Foundation.URL(string: self.absoluteStringURL)! } // Note: The URL explicit unwrap is safe here, since all objects are immutable and can't be allocated until the compiler ensures they meet the Swagger Spec
+}
+
+public extension {{operationIdCamelCase}}Request {
+    var asAirGapRequest: Request {
+        return Request({{operationIdCamelCase}}Request.verb,
+                       self.url.absoluteStringURL{{#hasQueryParams}},
+                       query: url.query.asStringDictionary{{/hasQueryParams}}{{#hasHeaderParams}},
+                       headers: self.headers.asStringDictionary{{/hasHeaderParams}}{{#hasBodyParam}},
+                       body: self.body.asDictionary{{/hasBodyParam}})
+    }
+}
+
 {{/operation}}
 
 {{/operations}}
