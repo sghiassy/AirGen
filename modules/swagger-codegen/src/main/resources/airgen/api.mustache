@@ -42,18 +42,7 @@ public class {{operationIdCamelCase}}Request: NSObject, Codable {
 {{> RequestParamsQuery}}
 {{> RequestParamsHeader}}
 
-/*
- *    ____     __               _
- *   / __/_ __/ /____ ___  ___ (_)__  ___  ___
- *  / _/ \ \ / __/ -_) _ \(_-</ / _ \/ _ \(_-<
- * /___//_\_\\__/\__/_//_/___/_/\___/_//_/___/
- */
-
-public extension {{operationIdCamelCase}}Request {
-    var asAirGapRequest: Request { return Request(verb: {{operationIdCamelCase}}Request.verb, transitionType: {{operationIdCamelCase}}Request.transitionType, urlString: self.url.urlString, query: url.query.asStringDictionary, headers: self.headers.asStringDictionary, body: self.body.asDictionary) }
-    var asData: Data { return try! JSONEncoder().encode(self) }// AirGen objects have guaranteed data consistency so we can assert this won't throw
-    var asRawString: String { return String(data: self.asData, encoding: .utf8)! } // AirGen objects have guaranteed data consistency so we can assert this won't throw
-}
+{{> RequestExtensions}}
 
 {{/operation}}
 {{/operations}}
