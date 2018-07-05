@@ -289,6 +289,7 @@ public class AirGenCodegen extends DefaultCodegen implements CodegenConfig {
         // supportingFiles.add(new SupportingFile("APIs.mustache", sourceFolder,
         // "APIs.swift"));
         supportingFiles.add(new SupportingFile("APIHelpers.mustache", sourceFolder, "APIHelpers.swift"));
+        supportingFiles.add(new SupportingFile("APIBaseObjects.mustache", sourceFolder, "APIBaseObjects.swift"));
         // supportingFiles.add(new SupportingFile("CodableHelper.mustache",
         // sourceFolder, "CodableHelper.swift"));
         // supportingFiles

@@ -2,4 +2,4 @@
     This snippet tries to figure out if it should provide a default value
     The logic sucks and needs to be refactored, by making the calling class provide clearer information
 }}
-{{^required}}{{#defaultValue}} = {{> ParamDefaultValue.snippet}} {{/defaultValue}}{{^defaultValue}}{{#isBoolean}} = false {{/isBoolean}}{{/defaultValue}}{{/required}}
+{{^required}}{{#defaultValue}} = {{> ParamDefaultValue.snippet}} {{/defaultValue}}{{/required}}{{^required}}{{^defaultValue}}{{#isBoolean}} = false {{/isBoolean}}{{/defaultValue}}{{/required}}

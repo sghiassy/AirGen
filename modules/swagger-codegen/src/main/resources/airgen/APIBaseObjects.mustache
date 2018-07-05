@@ -1,0 +1,27 @@
+
+public class AirGenericPath: NSObject, Codable {
+
+}
+
+public class AirGenericQuery: NSObject, Codable {
+
+}
+
+public class AirGenericURL: NSObject, Codable {
+    let url: URL
+    var urlString: String { return self.url.absoluteString }
+    let path = AirGenericPath()
+    let query = AirGenericQuery()
+
+    init(url: URL) {
+        self.url = url
+    }
+}
+
+public class AirGenericHeaders: NSObject, Codable {
+
+}
+
+public class AirGenericBody: NSObject, Codable {
+
+}

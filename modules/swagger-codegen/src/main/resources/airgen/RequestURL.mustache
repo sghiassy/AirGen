@@ -1,20 +1,2 @@
-@objc({{operationIdCamelCase}}RequestURL)
-public class URL: NSObject, Codable {
-
-    public static let Definition: String = "{{basePath}}{{{path}}}"
-
-    {{#hasPathParams}}
-    public let path: {{operationIdCamelCase}}Request.URL.Path{{/hasPathParams}}{{#hasQueryParams}}
-    public let query: {{operationIdCamelCase}}Request.URL.Query{{/hasQueryParams}}
-
-    {{! A terrible way to have to do OR logic in Handlebars }}
-    {{! Basically just want hasPathParams OR hasQueryParams }}
-    {{#hasPathParams}}
-    {{> RequestURLInit.snippet}}
-    {{/hasPathParams}}
-    {{^hasPathParams}}
-    {{#hasQueryParams}}
-    {{> RequestURLInit.snippet}}
-    {{/hasQueryParams}}
-    {{/hasPathParams}}
-}
+{{! Mustache templates do not have OR logic, so had to contract a simple 3 variable OR logic with only AAND logic - ts terrible }}
+{{#hasParams}}{{#hasHeaderParams}}{{#hasBodyParam}}{{> RequestURL.snippet}}{{/hasBodyParam}}{{/hasHeaderParams}}{{/hasParams}}{{^hasParams}}{{#hasHeaderParams}}{{#hasBodyParam}}{{> RequestURL.snippet}}{{/hasBodyParam}}{{/hasHeaderParams}}{{/hasParams}}{{#hasParams}}{{^hasHeaderParams}}{{#hasBodyParam}}{{> RequestURL.snippet}}{{/hasBodyParam}}{{/hasHeaderParams}}{{/hasParams}}{{#hasParams}}{{#hasHeaderParams}}{{^hasBodyParam}}{{> RequestURL.snippet}}{{/hasBodyParam}}{{/hasHeaderParams}}{{/hasParams}}{{#hasParams}}{{^hasHeaderParams}}{{^hasBodyParam}}{{> RequestURL.snippet}}{{/hasBodyParam}}{{/hasHeaderParams}}{{/hasParams}}{{^hasParams}}{{^hasHeaderParams}}{{#hasBodyParam}}{{> RequestURL.snippet}}{{/hasBodyParam}}{{/hasHeaderParams}}{{/hasParams}}
