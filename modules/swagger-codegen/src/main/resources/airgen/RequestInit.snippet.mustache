@@ -1,8 +1,0 @@
-public init({{#hasParams}}url: {{operationIdCamelCase}}Request.URL{{/hasParams}}{{#hasHeaderParams}},
-    headers: {{operationIdCamelCase}}Request.Headers{{/hasHeaderParams}}{{#hasBodyParam}},
-    body: {{#bodyParam}}{{dataType}}{{/bodyParam}}{{/hasBodyParam}}) {
-        {{#hasParams}}self.url = url{{/hasParams}}{{#hasHeaderParams}}
-        self.headers = headers{{/hasHeaderParams}}{{#hasBodyParam}}
-        self.body = body{{/hasBodyParam}}
-    super.init()
-}

@@ -14,5 +14,24 @@ public struct {{classname}}: Codable {
         self.{{name}} = {{name}}
         {{/allVars}}
     }
+
+
+}
+
+
+//
+//     _____                             _      __    _ __
+//    / ___/__  ___  __ __  ___  ___    | | /| / /___(_) /____
+//   / /__/ _ \/ _ \/ // / / _ \/ _ \   | |/ |/ / __/ / __/ -_)
+//   \___/\___/ .__/\_, /  \___/_//_/   |__/|__/_/ /_/\__/\__/
+//           /_/   /___/
+//
+//
+public extension {{classname}} {
+    {{#allVars}}
+    public func with({{name}}: {{> ModelObjectEnumType.snippet}}{{> Optional.snippet}}) -> {{classname}} {
+        return {{classname}}({{#allVars}}{{name}}:{{name}}{{#hasMore}}, {{/hasMore}}{{/allVars}})
+    }
+    {{/allVars}}
 }
 {{/hasVars}}

@@ -1,2 +1,13 @@
-{{! Mustache templates do not have OR logic, so had to contract a simple 3 variable OR logic with only AAND logic - ts terrible }}
-{{#hasParams}}{{#hasHeaderParams}}{{#hasBodyParam}}{{> RequestURL.snippet}}{{/hasBodyParam}}{{/hasHeaderParams}}{{/hasParams}}{{^hasParams}}{{#hasHeaderParams}}{{#hasBodyParam}}{{> RequestURL.snippet}}{{/hasBodyParam}}{{/hasHeaderParams}}{{/hasParams}}{{#hasParams}}{{^hasHeaderParams}}{{#hasBodyParam}}{{> RequestURL.snippet}}{{/hasBodyParam}}{{/hasHeaderParams}}{{/hasParams}}{{#hasParams}}{{#hasHeaderParams}}{{^hasBodyParam}}{{> RequestURL.snippet}}{{/hasBodyParam}}{{/hasHeaderParams}}{{/hasParams}}{{#hasParams}}{{^hasHeaderParams}}{{^hasBodyParam}}{{> RequestURL.snippet}}{{/hasBodyParam}}{{/hasHeaderParams}}{{/hasParams}}{{^hasParams}}{{^hasHeaderParams}}{{#hasBodyParam}}{{> RequestURL.snippet}}{{/hasBodyParam}}{{/hasHeaderParams}}{{/hasParams}}
+public struct URL: Codable {
+
+    public let path: {{#hasPathParams}}{{operationIdCamelCase}}Request.URL.Path{{/hasPathParams}}{{^hasPathParams}}AirGenericPath{{/hasPathParams}}
+    public let query: {{#hasQueryParams}}{{operationIdCamelCase}}Request.URL.Query{{/hasQueryParams}}{{^hasQueryParams}}AirGenericQuery{{/hasQueryParams}}
+
+    public init(path: {{#hasPathParams}}{{operationIdCamelCase}}Request.URL.Path{{/hasPathParams}}{{^hasPathParams}}AirGenericPath = AirGenericPath(){{/hasPathParams}}, query: {{#hasQueryParams}}{{operationIdCamelCase}}Request.URL.Query{{/hasQueryParams}}{{^hasQueryParams}}AirGenericQuery = AirGenericQuery(){{/hasQueryParams}}) {
+        self.path = path
+        self.query = query
+    }
+
+    public var urlString: String { return AbsoluteStringURL(urlDefinition: {{operationIdCamelCase}}Request.URLDefinition, pathParams:{{#hasPathParams}}self.path.asStringDictionary{{/hasPathParams}}{{^hasPathParams}}nil{{/hasPathParams}}, queryParams:{{#hasQueryParams}}self.query.asStringDictionary{{/hasQueryParams}}{{^hasQueryParams}}nil{{/hasQueryParams}}) }
+    public var url: Foundation.URL { return Foundation.URL(string: self.urlString)! } // Note: The URL explicit unwrap is safe here, since all objects are immutable and can't be allocated until the compiler ensures they meet the Swagger Spec
+}

@@ -1,6 +1,0 @@
-public init({{#hasPathParams}}
-    path: {{operationIdCamelCase}}Request.URL.Path{{/hasPathParams}}{{#hasPathParams}}{{#hasQueryParams}},{{/hasQueryParams}}{{/hasPathParams}}{{#hasQueryParams}}
-    query: {{operationIdCamelCase}}Request.URL.Query{{/hasQueryParams}}) {
-    {{#hasPathParams}}self.path = path{{/hasPathParams}}
-    {{#hasQueryParams}}self.query = query{{/hasQueryParams}}
-}

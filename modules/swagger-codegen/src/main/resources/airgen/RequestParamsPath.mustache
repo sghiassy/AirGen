@@ -1,8 +1,7 @@
 {{#hasPathParams}}
 public extension {{operationIdCamelCase}}Request.URL {
 
-    @objc({{operationIdCamelCase}}RequestPath)
-    public class Path: NSObject, Codable {
+    public struct Path: Codable {
     {{#pathParams}}
         {{#description}}/** {{description}} */
         {{/description}}public let {{paramName}}: {{> RequestParamsEnumType.snippet}}{{> Optional.snippet}}
@@ -13,5 +12,36 @@ public extension {{operationIdCamelCase}}Request.URL {
             {{/pathParams}}
         }
     }
+}
+
+//
+//     _____                             _      __    _ __
+//    / ___/__  ___  __ __  ___  ___    | | /| / /___(_) /____
+//   / /__/ _ \/ _ \/ // / / _ \/ _ \   | |/ |/ / __/ / __/ -_)
+//   \___/\___/ .__/\_, /  \___/_//_/   |__/|__/_/ /_/\__/\__/
+//           /_/   /___/
+//
+public extension {{operationIdCamelCase}}Request.URL.Path {
+    {{#pathParams}}
+    func with({{paramName}}: {{> RequestParamsEnumType.snippet}}{{> Optional.snippet}}) -> {{operationIdCamelCase}}Request.URL.Path {
+        return {{operationIdCamelCase}}Request.URL.Path({{#pathParams}}{{paramName}}:{{paramName}}{{#hasMore}}, {{/hasMore}}{{/pathParams}})
+    }
+    {{/pathParams}}
+}
+
+public extension {{operationIdCamelCase}}Request.URL {
+    {{#pathParams}}
+    func with({{paramName}}: {{> RequestParamsEnumType.snippet}}{{> Optional.snippet}}) -> {{operationIdCamelCase}}Request.URL {
+        return {{operationIdCamelCase}}Request.URL(path:path.with({{paramName}}:{{paramName}}), query:query)
+    }
+    {{/pathParams}}
+}
+
+public extension {{operationIdCamelCase}}Request {
+    {{#pathParams}}
+    func with({{paramName}}: {{> RequestParamsEnumType.snippet}}{{> Optional.snippet}}) -> {{operationIdCamelCase}}Request {
+        return {{operationIdCamelCase}}Request(url:url.with({{paramName}}:{{paramName}}), headers:headers, body:body)
+    }
+    {{/pathParams}}
 }
 {{/hasPathParams}}
