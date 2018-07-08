@@ -1,20 +1,19 @@
 
-open class AirGenRequest: NSObject {
-
+public struct AirGenRequest: Codable {
+    public init() {}
 }
 
-
-public class AirGenericPath: NSObject, Codable {
-
+public struct AirGenericPath: Codable {
+    public init() {}
 }
 
-public class AirGenericQuery: NSObject, Codable {
-
+public struct AirGenericQuery: Codable {
+    public init() {}
 }
 
-public class AirGenericURL: NSObject, Codable {
+public class AirGenericURL: Codable {
     let url: URL
-    var urlString: String { return self.url.absoluteString }
+    var urlString: String { return url.absoluteString }
     let path = AirGenericPath()
     let query = AirGenericQuery()
 
@@ -23,10 +22,10 @@ public class AirGenericURL: NSObject, Codable {
     }
 }
 
-public class AirGenericHeaders: NSObject, Codable {
-
+public struct AirGenericHeaders: Codable {
+    public init() {}
 }
 
-public class AirGenericBody: NSObject, Codable {
-
+public struct AirGenericBody: Codable {
+    public init() {}
 }
