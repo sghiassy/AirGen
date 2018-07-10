@@ -20,6 +20,7 @@ import io.swagger.models.Swagger;
 import io.swagger.models.parameters.HeaderParameter;
 import io.swagger.models.parameters.Parameter;
 import io.swagger.models.properties.ArrayProperty;
+import io.swagger.models.properties.BooleanProperty;
 import io.swagger.models.properties.MapProperty;
 import io.swagger.models.properties.Property;
 
@@ -423,8 +424,18 @@ public class AirGenCodegen extends DefaultCodegen implements CodegenConfig {
 
     @Override
     public String toDefaultValue(Property prop) {
-        // nil
-        return null;
+        // Translate a default value into a string to be able to be used by the
+        // templates
+        if (prop instanceof BooleanProperty) {
+            BooleanProperty bp = (BooleanProperty) prop;
+            try {
+                return bp.getDefault() == true ? "true" : "false";
+            } catch (Exception e) {
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 
     @Override
