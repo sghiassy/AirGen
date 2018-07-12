@@ -1,6 +1,6 @@
 {{#hasHeaderParams}}
 public extension {{operationIdCamelCase}}Request {
-    public struct Headers: Codable {
+    public struct Header: Codable {
     {{#headerParams}}
         {{#description}}/** {{description}} */
         {{/description}}public let {{paramName}}: {{> RequestParamsEnumType.snippet}}{{> Optional.snippet}}
@@ -21,10 +21,10 @@ public extension {{operationIdCamelCase}}Request {
 //   \___/\___/ .__/\_, /  \___/_//_/   |__/|__/_/ /_/\__/\__/
 //           /_/   /___/
 //
-public extension {{operationIdCamelCase}}Request.Headers {
+public extension {{operationIdCamelCase}}Request.Header {
     {{#headerParams}}
-    func with({{paramName}}: {{> RequestParamsEnumType.snippet}}{{> Optional.snippet}}) -> {{operationIdCamelCase}}Request.Headers {
-        return {{operationIdCamelCase}}Request.Headers({{#headerParams}}{{paramName}}:{{paramName}}{{#hasMore}}, {{/hasMore}}{{/headerParams}})
+    func with({{paramName}}: {{> RequestParamsEnumType.snippet}}{{> Optional.snippet}}) -> {{operationIdCamelCase}}Request.Header {
+        return {{operationIdCamelCase}}Request.Header({{#headerParams}}{{paramName}}:{{paramName}}{{#hasMore}}, {{/hasMore}}{{/headerParams}})
     }
     {{/headerParams}}
 }

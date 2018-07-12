@@ -16,4 +16,15 @@
 
 import Foundation
 
-{{> APIRequestHelperFunctions}}
+public extension Encodable {
+    var asDictionary: [String: Any]? {
+        guard let data = try? JSONEncoder().encode(self) else { return nil }
+        return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap { $0 as? [String: Any] }
+    }
+
+    var asStringDictionary: [String: String]? {
+        return asDictionary?.mapValues({ (val) -> String in
+            "\(val)"
+        })
+    }
+}
