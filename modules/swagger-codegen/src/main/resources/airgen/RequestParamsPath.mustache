@@ -11,6 +11,18 @@ public extension {{operationIdCamelCase}}Request.URL {
             self.{{paramName}} = {{paramName}}
             {{/pathParams}}
         }
+
+        enum CodingKeys: String, CodingKey {
+            {{#pathParams}}
+            case {{paramName}}
+            {{/pathParams}}
+        }
+
+        public init(from decoder: Decoder) throws {
+            let values = try decoder.container(keyedBy: CodingKeys.self){{#pathParams}}
+            {{paramName}} = (try{{^required}}?{{/required}} values.{{#isString}}decode{{/isString}}{{^isString}}decodeFromString{{/isString}}({{> RequestParamsEnumType.snippet}}.self, forKey: .{{paramName}})){{#defaultValue}} ?? {{> ParamDefaultValue.snippet}}{{/defaultValue}}
+            {{/pathParams}}
+        }
     }
 }
 

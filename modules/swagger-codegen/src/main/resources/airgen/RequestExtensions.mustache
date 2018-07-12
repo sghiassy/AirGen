@@ -27,13 +27,13 @@ public extension Request {
         {{#hasParams}}
         guard
         {{#hasPathParams}}
-        let path: {{operationIdCamelCase}}Request.URL.Path = try? JSONDecoder().decode({{operationIdCamelCase}}Request.URL.Path.self, from: JSONSerialization.data(withJSONObject: {{operationIdCamelCase}}Request.Definition.paramItems(fromPath: self.url.path), options: .prettyPrinted)),
+        let path: {{operationIdCamelCase}}Request.URL.Path = try? JSONDecoder().decode({{operationIdCamelCase}}Request.URL.Path.self, from: JSONSerialization.data(withJSONObject: {{operationIdCamelCase}}Request.Definition.paramItems(fromPath: self.url.path), options: .prettyPrinted)){{#hasQueryParams}}{{#hasHeaderParams}}{{#hasBodyParam}},{{/hasBodyParam}}{{/hasHeaderParams}}{{/hasQueryParams}}{{#hasQueryParams}}{{^hasHeaderParams}}{{#hasBodyParam}},{{/hasBodyParam}}{{/hasHeaderParams}}{{/hasQueryParams}}{{#hasQueryParams}}{{#hasHeaderParams}}{{^hasBodyParam}},{{/hasBodyParam}}{{/hasHeaderParams}}{{/hasQueryParams}}{{#hasQueryParams}}{{^hasHeaderParams}}{{^hasBodyParam}},{{/hasBodyParam}}{{/hasHeaderParams}}{{/hasQueryParams}}
         {{/hasPathParams}}
         {{#hasQueryParams}}
-        let query: {{operationIdCamelCase}}Request.URL.Query = try? JSONDecoder().decode({{operationIdCamelCase}}Request.URL.Query.self, from: JSONSerialization.data(withJSONObject: self.url.queryItems, options: .prettyPrinted)),
+        let query: {{operationIdCamelCase}}Request.URL.Query = try? JSONDecoder().decode({{operationIdCamelCase}}Request.URL.Query.self, from: JSONSerialization.data(withJSONObject: self.url.queryItems, options: .prettyPrinted)){{#hasHeaderParams}}{{#hasBodyParam}},{{/hasBodyParam}}{{/hasHeaderParams}}{{^hasHeaderParams}}{{#hasBodyParam}},{{/hasBodyParam}}{{/hasHeaderParams}}{{#hasHeaderParams}}{{^hasBodyParam}},{{/hasBodyParam}}{{/hasHeaderParams}}
         {{/hasQueryParams}}
         {{#hasHeaderParams}}
-        let headers: {{operationIdCamelCase}}Request.Headers = try? JSONDecoder().decode({{operationIdCamelCase}}Request.Headers.self, from: JSONSerialization.data(withJSONObject: self.headers, options: .prettyPrinted)),
+        let headers: {{operationIdCamelCase}}Request.Headers = try? JSONDecoder().decode({{operationIdCamelCase}}Request.Headers.self, from: JSONSerialization.data(withJSONObject: self.headers, options: .prettyPrinted)){{#hasBodyParam}},{{/hasBodyParam}}
         {{/hasHeaderParams}}
         {{#hasBodyParam}}
         let body: {{operationIdCamelCase}}Request.Body = try? JSONDecoder().decode({{operationIdCamelCase}}Request.Body.self, from: JSONSerialization.data(withJSONObject: self.body, options: .prettyPrinted))
