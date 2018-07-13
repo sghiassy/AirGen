@@ -31,7 +31,8 @@ public struct AirGenericQuery: Codable {
 
 public class AirGenericURL: Codable {
     let url: URL
-    var urlString: String { return url.absoluteString }
+    public var asAbsoluteStringURL: String { return url.absoluteString }
+    public var asURL: URL { return url }
     let path = AirGenericPath()
     let query = AirGenericQuery()
 

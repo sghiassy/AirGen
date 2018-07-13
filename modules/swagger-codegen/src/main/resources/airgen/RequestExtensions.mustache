@@ -8,15 +8,48 @@
  // Needs to get hoisted into superclass (but that currently messes up Codable protocol considerably)
 public extension {{operationIdCamelCase}}Request {
     @discardableResult
-    public func setCookie(key: String, value: String, path: String = "/", expireInMinutes experiation: TimeInterval? = nil) -> Bool { return setCookieForURL(self.url.url, key: key, value: value, path: path, expireInMinutes: experiation) }
-    public func getCookie(key: String) -> String? { return getCookieForURL(self.url.url, withKey: key) }
-    var cookies: [String: String]? { get { return getCookiesForURL(self.url.url) } }
-    public func deleteCookies() { deleteCookiesForURL(self.url.url) }
+    public func setCookie(key: String, value: String, path: String = "/", expireInMinutes experiation: TimeInterval? = nil) -> Bool { return setCookieForURL(self.url.asURL, key: key, value: value, path: path, expireInMinutes: experiation) }
+    public func getCookie(key: String) -> String? { return getCookieForURL(self.url.asURL, withKey: key) }
+    var cookies: [String: String]? { get { return getCookiesForURL(self.url.asURL) } }
+    public func deleteCookies() { deleteCookiesForURL(self.url.asURL) }
 }
 
 // AirGen Related Methods
 public extension {{operationIdCamelCase}}Request {
-    var asAirGapRequest: Request { return Request(verb: {{operationIdCamelCase}}Request.verb, transitionType: {{operationIdCamelCase}}Request.transitionType, urlString: self.url.urlString, query: url.query.asStringDictionary, headers: self.headers.asStringDictionary, body: self.body.asDictionary) }
+    var asAirGapRequest: Request { return Request(verb: {{operationIdCamelCase}}Request.verb, transitionType: {{operationIdCamelCase}}Request.transitionType, urlString: self.url.asAbsoluteStringURL, query: url.query.asStringDictionary, headers: self.headers.asStringDictionary, body: self.body.asDictionary) }
     var asData: Data { return try! JSONEncoder().encode(self) }// AirGen objects have guaranteed data consistency so we can assert this won't throw
     var asRawString: String { return String(data: self.asData, encoding: .utf8)! } // AirGen objects have guaranteed data consistency so we can assert this won't throw
+}
+
+
+public extension Request {
+    var as{{operationIdCamelCase}}Request: {{operationIdCamelCase}}Request? {
+        {{#hasParams}}
+        guard
+        {{#hasPathParams}}
+        let path: {{operationIdCamelCase}}Request.URL.Path = try? JSONDecoder().decode({{operationIdCamelCase}}Request.URL.Path.self, from: JSONSerialization.data(withJSONObject: {{operationIdCamelCase}}Request.Definition.paramItems(fromPath: self.url.path), options: .prettyPrinted)){{#hasQueryParams}}{{#hasHeaderParams}}{{#hasBodyParam}},{{/hasBodyParam}}{{/hasHeaderParams}}{{/hasQueryParams}}{{#hasQueryParams}}{{^hasHeaderParams}}{{#hasBodyParam}},{{/hasBodyParam}}{{/hasHeaderParams}}{{/hasQueryParams}}{{#hasQueryParams}}{{#hasHeaderParams}}{{^hasBodyParam}},{{/hasBodyParam}}{{/hasHeaderParams}}{{/hasQueryParams}}{{#hasQueryParams}}{{^hasHeaderParams}}{{^hasBodyParam}},{{/hasBodyParam}}{{/hasHeaderParams}}{{/hasQueryParams}}
+        {{/hasPathParams}}
+        {{#hasQueryParams}}
+        let query: {{operationIdCamelCase}}Request.URL.Query = try? JSONDecoder().decode({{operationIdCamelCase}}Request.URL.Query.self, from: JSONSerialization.data(withJSONObject: self.url.queryItems, options: .prettyPrinted)){{#hasHeaderParams}}{{#hasBodyParam}},{{/hasBodyParam}}{{/hasHeaderParams}}{{^hasHeaderParams}}{{#hasBodyParam}},{{/hasBodyParam}}{{/hasHeaderParams}}{{#hasHeaderParams}}{{^hasBodyParam}},{{/hasBodyParam}}{{/hasHeaderParams}}
+        {{/hasQueryParams}}
+        {{#hasHeaderParams}}
+        let headers: {{operationIdCamelCase}}Request.Headers = try? JSONDecoder().decode({{operationIdCamelCase}}Request.Headers.self, from: JSONSerialization.data(withJSONObject: self.headers, options: .prettyPrinted)){{#hasBodyParam}},{{/hasBodyParam}}
+        {{/hasHeaderParams}}
+        {{#hasBodyParam}}
+        let body: {{operationIdCamelCase}}Request.Body = try? JSONDecoder().decode({{operationIdCamelCase}}Request.Body.self, from: JSONSerialization.data(withJSONObject: self.body, options: .prettyPrinted))
+        {{/hasBodyParam}}
+        else { return nil }
+        {{/hasParams}}
+
+        {{#hasParams}}
+        let url = {{operationIdCamelCase}}Request.URL(path: {{#hasPathParams}}path{{/hasPathParams}}{{^hasPathParams}}AirGenericPath(){{/hasPathParams}}, query: {{#hasQueryParams}}query{{/hasQueryParams}}{{^hasQueryParams}}AirGenericQuery(){{/hasQueryParams}})
+        {{/hasParams}}
+        {{^hasParams}}
+        let url = AirGenericURL(url: {{operationIdCamelCase}}Request.Definition.url)
+        {{/hasParams}}
+
+        return {{operationIdCamelCase}}Request(url: url,
+                                               headers: {{#hasHeaderParams}}headers{{/hasHeaderParams}}{{^hasHeaderParams}}AirGenericHeaders(){{/hasHeaderParams}},
+                                               body: {{#hasBodyParam}}body{{/hasBodyParam}}{{^hasBodyParam}}AirGenericBody(){{/hasBodyParam}})
+    }
 }
