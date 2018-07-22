@@ -1,0 +1,59 @@
+{{#hasQueryParams}}
+public extension {{operationIdCamelCase}}Request.URL {
+
+    public struct Query: Codable {
+    {{#queryParams}}
+        {{#description}}/** {{description}} */
+        {{/description}}public let {{paramName}}: {{> RequestParamsEnumType.snippet}}{{> Optional.snippet}}
+    {{/queryParams}}
+        public init({{#queryParams}}{{paramName}}: {{> RequestParamsEnumType.snippet}}{{> Optional.snippet}}{{> ParamRequiredDefaultValue.snippet}}{{#hasMore}}, {{/hasMore}}{{/queryParams}}) {
+            {{#queryParams}}
+            self.{{paramName}} = {{paramName}}
+            {{/queryParams}}
+        }
+
+        enum CodingKeys: String, CodingKey {
+            {{#queryParams}}
+            case {{paramName}}
+            {{/queryParams}}
+        }
+
+        public init(from decoder: Decoder) throws {
+            let values = try decoder.container(keyedBy: CodingKeys.self){{#queryParams}}
+            {{paramName}} = (try{{^required}}?{{/required}} values.{{#isString}}decode{{/isString}}{{^isString}}decodeFromString{{/isString}}({{> RequestParamsEnumType.snippet}}.self, forKey: .{{paramName}})){{#defaultValue}} ?? {{> ParamDefaultValue.snippet}}{{/defaultValue}}{{/queryParams}}
+        }
+
+    }
+}
+
+//
+//     _____                             _      __    _ __
+//    / ___/__  ___  __ __  ___  ___    | | /| / /___(_) /____
+//   / /__/ _ \/ _ \/ // / / _ \/ _ \   | |/ |/ / __/ / __/ -_)
+//   \___/\___/ .__/\_, /  \___/_//_/   |__/|__/_/ /_/\__/\__/
+//           /_/   /___/
+//
+public extension {{operationIdCamelCase}}Request.URL.Query {
+    {{#queryParams}}
+    func with({{paramName}}: {{> RequestParamsEnumType.snippet}}{{> Optional.snippet}}) -> {{operationIdCamelCase}}Request.URL.Query {
+        return {{operationIdCamelCase}}Request.URL.Query({{#queryParams}}{{paramName}}:{{paramName}}{{#hasMore}}, {{/hasMore}}{{/queryParams}})
+    }
+    {{/queryParams}}
+}
+
+public extension {{operationIdCamelCase}}Request.URL {
+    {{#queryParams}}
+    func with({{paramName}}: {{> RequestParamsEnumType.snippet}}{{> Optional.snippet}}) -> {{operationIdCamelCase}}Request.URL {
+        return {{operationIdCamelCase}}Request.URL(path:path, query:query.with({{paramName}}:{{paramName}}))
+    }
+    {{/queryParams}}
+}
+
+public extension {{operationIdCamelCase}}Request {
+    {{#queryParams}}
+    func with({{paramName}}: {{> RequestParamsEnumType.snippet}}{{> Optional.snippet}}) -> {{operationIdCamelCase}}Request {
+        return {{operationIdCamelCase}}Request(url:url.with({{paramName}}:{{paramName}}), headers:headers, body:body)
+    }
+    {{/queryParams}}
+}
+{{/hasQueryParams}}

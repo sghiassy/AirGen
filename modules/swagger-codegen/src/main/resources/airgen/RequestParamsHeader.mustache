@@ -1,0 +1,39 @@
+{{#hasHeaderParams}}
+public extension {{operationIdCamelCase}}Request {
+    public struct Header: Codable {
+    {{#headerParams}}
+        {{#description}}/** {{description}} */
+        {{/description}}public let {{paramName}}: {{> RequestParamsEnumType.snippet}}{{> Optional.snippet}}
+    {{/headerParams}}
+        public init({{#headerParams}}{{paramName}}: {{> RequestParamsEnumType.snippet}}{{> Optional.snippet}}{{> ParamRequiredDefaultValue.snippet}}{{#hasMore}}, {{/hasMore}}{{/headerParams}}) {
+            {{#headerParams}}
+            self.{{paramName}} = {{paramName}}
+            {{/headerParams}}
+        }
+    }
+}
+
+
+//
+//     _____                             _      __    _ __
+//    / ___/__  ___  __ __  ___  ___    | | /| / /___(_) /____
+//   / /__/ _ \/ _ \/ // / / _ \/ _ \   | |/ |/ / __/ / __/ -_)
+//   \___/\___/ .__/\_, /  \___/_//_/   |__/|__/_/ /_/\__/\__/
+//           /_/   /___/
+//
+public extension {{operationIdCamelCase}}Request.Header {
+    {{#headerParams}}
+    func with({{paramName}}: {{> RequestParamsEnumType.snippet}}{{> Optional.snippet}}) -> {{operationIdCamelCase}}Request.Header {
+        return {{operationIdCamelCase}}Request.Header({{#headerParams}}{{paramName}}:{{paramName}}{{#hasMore}}, {{/hasMore}}{{/headerParams}})
+    }
+    {{/headerParams}}
+}
+
+public extension {{operationIdCamelCase}}Request {
+    {{#headerParams}}
+    func with({{paramName}}: {{> RequestParamsEnumType.snippet}}{{> Optional.snippet}}) -> {{operationIdCamelCase}}Request {
+        return {{operationIdCamelCase}}Request(url:url, headers:headers.with({{paramName}}:{{paramName}}), body:body)
+    }
+    {{/headerParams}}
+}
+{{/hasHeaderParams}}
