@@ -30,7 +30,7 @@ public struct {{operationIdCamelCase}}Request: Codable {
 
     public static let Definition = URLDefinition(Foundation.URL(string:"{{basePath}}{{{path}}}")!)
     public static let verb: RequestType = .{{httpMethod}}
-    public static let transitionType: BrowserTransitionType = .{{> BrowserTransitionType.snippet}}
+    public static let transitionType: Browser.TransitionType = .{{> BrowserTransitionType.snippet}}
     public let url: {{^hasParams}}AirGenericURL{{/hasParams}}{{#hasParams}}{{operationIdCamelCase}}Request.URL{{/hasParams}}
     public let headers: {{operationIdCamelCase}}Request.Headers
     public let body: {{operationIdCamelCase}}Request.Body
