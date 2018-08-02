@@ -4,6 +4,8 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 
+import java.lang.Double;
+
 import io.swagger.codegen.CliOption;
 import io.swagger.codegen.CodegenConfig;
 import io.swagger.codegen.CodegenConstants;
@@ -18,11 +20,35 @@ import io.swagger.models.ModelImpl;
 import io.swagger.models.Operation;
 import io.swagger.models.Swagger;
 import io.swagger.models.parameters.HeaderParameter;
+import io.swagger.models.parameters.BodyParameter;
+import io.swagger.models.parameters.CookieParameter;
+import io.swagger.models.parameters.FormParameter;
+import io.swagger.models.parameters.HeaderParameter;
 import io.swagger.models.parameters.Parameter;
+import io.swagger.models.parameters.PathParameter;
+import io.swagger.models.parameters.QueryParameter;
+import io.swagger.models.parameters.SerializableParameter;
+import io.swagger.models.properties.AbstractNumericProperty;
 import io.swagger.models.properties.ArrayProperty;
+import io.swagger.models.properties.BaseIntegerProperty;
+import io.swagger.models.properties.BinaryProperty;
 import io.swagger.models.properties.BooleanProperty;
+import io.swagger.models.properties.ByteArrayProperty;
+import io.swagger.models.properties.DateProperty;
+import io.swagger.models.properties.DateTimeProperty;
+import io.swagger.models.properties.DecimalProperty;
+import io.swagger.models.properties.DoubleProperty;
+import io.swagger.models.properties.FileProperty;
+import io.swagger.models.properties.FloatProperty;
+import io.swagger.models.properties.IntegerProperty;
+import io.swagger.models.properties.LongProperty;
 import io.swagger.models.properties.MapProperty;
 import io.swagger.models.properties.Property;
+import io.swagger.models.properties.PropertyBuilder;
+import io.swagger.models.properties.PropertyBuilder.PropertyId;
+import io.swagger.models.properties.RefProperty;
+import io.swagger.models.properties.StringProperty;
+import io.swagger.models.properties.UUIDProperty;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -40,7 +66,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class AirGenCodegen extends DefaultCodegen implements CodegenConfig {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AirGenCodegen.class);
+
     public static final String PROJECT_NAME = "projectName";
     public static final String RESPONSE_AS = "responseAs";
     public static final String UNWRAP_REQUIRED = "unwrapRequired";
@@ -423,19 +455,58 @@ public class AirGenCodegen extends DefaultCodegen implements CodegenConfig {
     }
 
     @Override
-    public String toDefaultValue(Property prop) {
-        // Translate a default value into a string to be able to be used by the
-        // templates
-        if (prop instanceof BooleanProperty) {
-            BooleanProperty bp = (BooleanProperty) prop;
+    public String toDefaultValue(Property p) {
+        if (p instanceof StringProperty) {
+            StringProperty sp = (StringProperty) p;
+            if (sp.getDefault() != null) {
+                return sp.getDefault();
+            }
+        } else if (p instanceof BooleanProperty) {
+            BooleanProperty bp = (BooleanProperty) p;
+            // LOGGER.info("shaheen: starting toDefaultValue.boolean for " + bp.getName());
             try {
                 return bp.getDefault() == true ? "true" : "false";
             } catch (Exception e) {
+                LOGGER.info("shaheen: could not get default value for boolean");
                 return null;
             }
-        } else {
-            return null;
+        } else if (p instanceof DateProperty) {
+            // LOGGER.info("shaheen: date intance");
+            // return "null";
+            // no-op
+        } else if (p instanceof DateTimeProperty) {
+            // LOGGER.info("shaheen: datetime intance");
+            // return "null";
+            // no-op
+        } else if (p instanceof IntegerProperty) {
+            IntegerProperty dp = (IntegerProperty) p;
+            // LOGGER.info("shaheen: starting toDefaultValue.IntegerProperty for " + dp);
+            if (dp.getDefault() != null) {
+                return dp.getDefault().toString();
+            }
+        } else if (p instanceof DoubleProperty) {
+            DoubleProperty dp = (DoubleProperty) p;
+            // LOGGER.info("shaheen: starting toDefaultValue.DoubleProperty for " + dp);
+            if (dp.getDefault() != null) {
+                return dp.getDefault().toString();
+            }
+        } else if (p instanceof FloatProperty) {
+            FloatProperty dp = (FloatProperty) p;
+            // LOGGER.info("shaheen: starting toDefaultValue.FloatProperty for " + dp);
+            if (dp.getDefault() != null) {
+                return dp.getDefault().toString();
+            }
+        } else if (p instanceof LongProperty) {
+            LongProperty dp = (LongProperty) p;
+            // LOGGER.info("shaheen: starting toDefaultValue.LongProperty for " + dp);
+            if (dp.getDefault() != null) {
+                return dp.getDefault().toString();
+            }
         }
+
+        // LOGGER.info("shaheen: could not find ANY instance type for " + p);
+
+        return null;
     }
 
     @Override
