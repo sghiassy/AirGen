@@ -458,53 +458,46 @@ public class AirGenCodegen extends DefaultCodegen implements CodegenConfig {
     public String toDefaultValue(Property p) {
         if (p instanceof StringProperty) {
             StringProperty sp = (StringProperty) p;
-            if (sp.getDefault() != null) {
+            if (sp.getEnum() != null) {
+                List<String> enumValues = sp.getEnum();
+                if (enumValues != null && !enumValues.isEmpty()) {
+                    return sp.getEnum().get(0);
+                }
+            } else if (sp.getDefault() != null) {
                 return sp.getDefault();
             }
         } else if (p instanceof BooleanProperty) {
             BooleanProperty bp = (BooleanProperty) p;
-            // LOGGER.info("shaheen: starting toDefaultValue.boolean for " + bp.getName());
             try {
                 return bp.getDefault() == true ? "true" : "false";
             } catch (Exception e) {
-                LOGGER.info("shaheen: could not get default value for boolean");
                 return null;
             }
         } else if (p instanceof DateProperty) {
-            // LOGGER.info("shaheen: date intance");
-            // return "null";
             // no-op
         } else if (p instanceof DateTimeProperty) {
-            // LOGGER.info("shaheen: datetime intance");
-            // return "null";
             // no-op
         } else if (p instanceof IntegerProperty) {
             IntegerProperty dp = (IntegerProperty) p;
-            // LOGGER.info("shaheen: starting toDefaultValue.IntegerProperty for " + dp);
             if (dp.getDefault() != null) {
                 return dp.getDefault().toString();
             }
         } else if (p instanceof DoubleProperty) {
             DoubleProperty dp = (DoubleProperty) p;
-            // LOGGER.info("shaheen: starting toDefaultValue.DoubleProperty for " + dp);
             if (dp.getDefault() != null) {
                 return dp.getDefault().toString();
             }
         } else if (p instanceof FloatProperty) {
             FloatProperty dp = (FloatProperty) p;
-            // LOGGER.info("shaheen: starting toDefaultValue.FloatProperty for " + dp);
             if (dp.getDefault() != null) {
                 return dp.getDefault().toString();
             }
         } else if (p instanceof LongProperty) {
             LongProperty dp = (LongProperty) p;
-            // LOGGER.info("shaheen: starting toDefaultValue.LongProperty for " + dp);
             if (dp.getDefault() != null) {
                 return dp.getDefault().toString();
             }
         }
-
-        // LOGGER.info("shaheen: could not find ANY instance type for " + p);
 
         return null;
     }
@@ -654,7 +647,13 @@ public class AirGenCodegen extends DefaultCodegen implements CodegenConfig {
 
     @Override
     public String toEnumDefaultValue(String value, String datatype) {
-        return datatype + "_" + value;
+        if ("number".equalsIgnoreCase(datatype)) {
+            return value;
+        } else if ("string".equalsIgnoreCase(datatype)) {
+            return "." + value;
+        } else {
+            return value;
+        }
     }
 
     @Override
